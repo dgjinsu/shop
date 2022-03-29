@@ -27,6 +27,7 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
 
     //JPQL은 테이블을 대상으로 하는것이 아니라 엔티티 객체를 대상으로 쿼리를 수행한다.
     //select 변수 from (어디에서) where (조건) like
+    //추후에 공부 더하기
     @Query("select i from Item i where i.itemDetail like %:itemDetail% order by i.price desc")
     List<Item> findByItemDetail(@Param("itemDetail") String itemDetail);
 

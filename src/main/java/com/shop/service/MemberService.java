@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional  //로직을 처리하다가 에러가 발생하였다면, 변겨된 데이터를 로직을 수행하기 이전으로 콜백
 public class MemberService implements UserDetailsService {
-
+    // UserDetailService 인터페이스 : DB 에서 회원 정보를 가져오는 역할 담당
     private final MemberRepository memberRepository;
 
     @Autowired
@@ -28,6 +28,7 @@ public class MemberService implements UserDetailsService {
         return save;
     }
 
+    // boolean existMember = memberRepository.existsById(request.getEmail());
     private void validateDuplicateMember(Member member) {
         Member findMember = memberRepository.findByEmail(member.getEmail());
         if(findMember != null) {
@@ -35,6 +36,7 @@ public class MemberService implements UserDetailsService {
         }
     }
 
+    //사용자의 정보와 권한을 갖는 UserDetails 인터페이스를 반환한다.
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(email);

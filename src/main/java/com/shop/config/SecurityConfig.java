@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
-        //loginForm에서 로그인을 누룰 시 여기서 동작
+        //loginForm 에서 로그인을 누룰 시 여기서 동작
         http.formLogin()
                 .loginPage("/members/login")        //로그인 페이지 url 설정
                 .defaultSuccessUrl("/")             //로그인 성공 시 이동할 url 설정
@@ -44,11 +44,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         //경로마다 인증여부에 따른 접근 가능을 설정
         http.authorizeRequests()
-                .mvcMatchers("/", "/members/**", "/item/**", "/images/**").permitAll()
-                .mvcMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
+                .mvcMatchers("/", "/members/**", "/item/**", "/images/**").permitAll() //사용자 인증 없이
+                .mvcMatchers("/admin/**").hasRole("ADMIN")                              //관리자 계정만
+                .anyRequest().authenticated()                                                   //인증 요구
                 ;
 
+        //인증되지 않은 사용자가 리소스에 접근했을 때 수행되는 핸들러를 등록
         http.exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
     }
@@ -58,7 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**");
     }
-
+    
+    // DB 에 비밀번호를 바로 저장하면 위험 -> 비밀번호를 암호화 하여 저장
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

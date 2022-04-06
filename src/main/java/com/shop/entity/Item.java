@@ -16,7 +16,7 @@ public class Item {
 
     @Id
     @Column(name="item_id") //필드와 컬럼 매핑
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)     //키 값을 생성하는 전략(순서대로, 자동으로 등등)
     private Long id;                        //상품코드
 
     @Column(nullable = false, length = 50)  //null 값 불허, 길이 50제한

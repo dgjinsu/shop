@@ -26,6 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+    // http 요청에 대한 보안 설정
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
@@ -42,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/")
                 ;
 
-        //경로마다 인증여부에 따른 접근 가능을 설정
+        //페이지 권한 설정
         http.authorizeRequests()
                 .mvcMatchers("/", "/members/**", "/item/**", "/images/**").permitAll() //사용자 인증 없이
                 .mvcMatchers("/admin/**").hasRole("ADMIN")                              //관리자 계정만
@@ -66,6 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    // spring security 에서 인증은 AuthenticationManager 를 통해 이루어짐
+    // userDetailService 를 구현하고 있는 memberService 를 지정
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());

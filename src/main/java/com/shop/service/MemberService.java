@@ -37,6 +37,7 @@ public class MemberService implements UserDetailsService {
     }
 
     //사용자의 정보와 권한을 갖는 UserDetails 인터페이스를 반환한다.
+    //DB 에서 유저 정보를 불러오는 중요한 메소드
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(email);

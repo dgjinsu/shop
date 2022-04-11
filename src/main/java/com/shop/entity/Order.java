@@ -27,11 +27,14 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;    //주문상태
 
-    @OneToMany(mappedBy = "order")      // 연관 관계의 주인은 OrderItem 이다.
+    // 연관 관계의 주인은 OrderItem 이다.
+    // 부모 엔티티의 영속성 상태 변화를 자식 엔티티에 모두 전이하는 옵션 cascade.All
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
 
     private LocalDateTime regTime;          //등록 시간
 
     private LocalDateTime updateTime;       //수정 시간
+
 }

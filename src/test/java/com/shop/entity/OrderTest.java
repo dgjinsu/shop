@@ -2,6 +2,7 @@ package com.shop.entity;
 
 import com.shop.constant.ItemSellStatus;
 import com.shop.repository.ItemRepository;
+import com.shop.repository.MemberRepository;
 import com.shop.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,11 +28,14 @@ class OrderTest {
 
     private final EntityManager em;
 
+    private final MemberRepository memberRepository;
+
     @Autowired
-    OrderTest(OrderRepository orderRepository, ItemRepository itemRepository, EntityManager em) {
+    OrderTest(OrderRepository orderRepository, ItemRepository itemRepository, EntityManager em, MemberRepository memberRepository) {
         this.orderRepository = orderRepository;
         this.itemRepository = itemRepository;
         this.em = em;
+        this.memberRepository = memberRepository;
     }
 
 
@@ -74,4 +78,36 @@ class OrderTest {
         assertEquals(3, savedOrder.getOrderItems().size());
     }
 
-}
+    public Order createOrder() {
+        Order order = new Order();
+
+        for(int i=0;i<3;i++) {
+            Item item = this.createItem();
+            itemRepository.save(item);
+            OrderItem orderItem = new OrderItem();
+            orderItem.setItem(item);
+            orderItem.setCount(10);
+            orderItem.setOrderPrice(1000);
+            orderItem.setOrder(order);
+            // 영속성 컨텍스트에 저장되지 않은 orderItem 엔티티를 order 엔티티에 담아줌
+            order.getOrderItems().add(orderItem);
+        }
+        Member member = new Member();
+        memberRepository.save(member);
+
+        order.setMember(member);
+        orderRepository.save(order);
+        return order;
+    }
+
+    @Test
+    @DisplayName("고아객체 제거 테스트")
+    public void orphanRemovalTest() {
+        Order order = this.createOrder();
+        order.getOrderItems().remove(0);
+        em.flush();
+    }
+
+
+
+    }

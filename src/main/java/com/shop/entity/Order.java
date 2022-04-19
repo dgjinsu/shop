@@ -29,7 +29,7 @@ public class Order {
 
     // 연관 관계의 주인은 OrderItem 이다.
     // 부모 엔티티의 영속성 상태 변화를 자식 엔티티에 모두 전이하는 옵션 CascadeType.ALL
-    // 고아 객체 제거 orphanRemoval = true 
+    // 고아 객체 제거 orphanRemoval = true
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 

@@ -3,6 +3,7 @@ package com.shop.entity;
 import com.shop.constant.ItemSellStatus;
 import com.shop.repository.ItemRepository;
 import com.shop.repository.MemberRepository;
+import com.shop.repository.OrderItemRepository;
 import com.shop.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,12 +31,15 @@ class OrderTest {
 
     private final MemberRepository memberRepository;
 
+    private final OrderItemRepository orderItemRepository;
+
     @Autowired
-    OrderTest(OrderRepository orderRepository, ItemRepository itemRepository, EntityManager em, MemberRepository memberRepository) {
+    OrderTest(OrderRepository orderRepository, ItemRepository itemRepository, EntityManager em, MemberRepository memberRepository, OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.itemRepository = itemRepository;
         this.em = em;
         this.memberRepository = memberRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
 
@@ -107,6 +111,28 @@ class OrderTest {
         order.getOrderItems().remove(0);
         em.flush();
     }
+
+    @Test
+    @DisplayName("지연 로딩 테스트")
+    public void lazyLoadingTest() {
+        Order order = this.createOrder();
+        Long orderItemId = order.getOrderItems().get(0).getId();
+
+        // 영속성 컨텍스트의 변경 내용을 DB에 반영하는 것
+        em.flush();
+        em.clear();
+
+        OrderItem orderItem = orderItemRepository.findById(orderItemId)
+                .orElseThrow(EntityNotFoundException::new);
+        System.out.println("Order class : " + orderItem.getOrder().getClass());
+        System.out.println(orderItem.getOrder().getOrderDate());
+
+        System.out.println("======================");
+
+
+    }
+
+
 
 
 

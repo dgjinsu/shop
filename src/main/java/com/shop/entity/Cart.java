@@ -18,7 +18,7 @@ public class Cart {
     private Long id;
 
     // forein key FK
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 }

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 @Entity
 @Table(name = "item") //엔티티와 매핑할 테이블을 지정
-public class Item {
+public class Item extends BaseEntity{
 
     @Id
     @Column(name="item_id") //필드와 컬럼 매핑
@@ -34,8 +34,4 @@ public class Item {
 
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;  //상품 판매 상태
-
-    private LocalDateTime regTime;          //등록 시간
-
-    private LocalDateTime updateTime;       //수정 시간
 }

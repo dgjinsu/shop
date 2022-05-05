@@ -10,13 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ItemController {
 
     @GetMapping("/admin/item/new")
-    public String itemForm() {
+    public String itemForm(Model model) {
+        model.addAttribute("itemFormDto", new ItemFormDto());
         return "/item/itemForm";
     }
 
-    @GetMapping("/admin/item/new")
-    public String itemForm(Model model) {
-        model.addAttribute("itemFormDto", new ItemFormDto());
-        return "item/itemForm";
-    }
+
 }

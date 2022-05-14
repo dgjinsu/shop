@@ -38,7 +38,7 @@ public class ItemFormDto {
 
     private static ModelMapper modelMapper = new ModelMapper();
 
-    //
+    //상품 등록 폼으로부터 받은 데이터를 이용하여 item 객체 생성
     public Item createItem() {
         return modelMapper.map(this, Item.class);
     }

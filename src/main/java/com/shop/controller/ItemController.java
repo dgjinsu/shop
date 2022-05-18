@@ -27,6 +27,7 @@ public class ItemController {
         this.itemService = itemService;
     }
 
+    //필수값이 없으면 다시 아이템작성폼으로 리턴
     @GetMapping("/admin/item/new")
     public String itemForm(Model model) {
         model.addAttribute("itemFormDto", new ItemFormDto());

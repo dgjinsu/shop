@@ -18,7 +18,7 @@ public class FileService {
         String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
         String savedFileName = uuid.toString() + extension;
         String fileUploadFullUrl = uploadPath + "/" + savedFileName;
-        FileOutputStream fos = new FileOutputStream(fileUploadFullUrl);
+        FileOutputStream fos = new FileOutputStream(fileUploadFullUrl); //바이트 단위로 출력을 내보내는 클래스
         fos.write(fileData);
         fos.close();
         return savedFileName;

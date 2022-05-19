@@ -109,6 +109,8 @@ class OrderTest {
     public void orphanRemovalTest() {
         Order order = this.createOrder();
         order.getOrderItems().remove(0);
+        
+        // 영속성 컨텍스트와 DB가 동기화됨
         em.flush();
     }
 

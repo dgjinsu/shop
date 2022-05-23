@@ -31,7 +31,7 @@ public class MemberController {
         return "member/memberForm";
     }
 
-    @PostMapping("/new")
+    @PostMapping("/new")   //검증하려는 객체 앞에 @Valid 를 붙이고 검사 후 결과는 bindingResult에 담아준다.
     public  String newMember(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model) {
 
         if(bindingResult.hasErrors()) {

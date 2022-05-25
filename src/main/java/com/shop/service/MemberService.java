@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional  //로직을 처리하다가 에러가 발생하였다면, 변겨된 데이터를 로직을 수행하기 이전으로 콜백
+@Transactional  //로직을 처리하다가 에러가 발생하였다면, 변경된 데이터를 로직을 수행하기 이전으로 콜백
 public class MemberService implements UserDetailsService {
-    // UserDetailService 인터페이스 : DB 에서 회원 정보를 가져오는 역할 담당
+    // UserDetailService 인터페이스 : DB 에서 회원 정보를 가져오는 역할 담당, 이 클래스를 통해 로그인 기능을 구현
     private final MemberRepository memberRepository;
 
     @Autowired
@@ -37,6 +37,7 @@ public class MemberService implements UserDetailsService {
     }
 
     //사용자의 정보와 권한을 갖는 UserDetails 인터페이스를 반환한다.
+    //스프링 시큐리티에선 UserDetails 인터페이스를 구현하고 있는 User 클래스를 사용한다.
     //DB 에서 유저 정보를 불러오는 중요한 메소드
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

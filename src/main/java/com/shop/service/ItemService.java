@@ -20,13 +20,11 @@ public class ItemService {
 
     private final ItemRepository itemRepository;
     private final ItemImgService itemImgService;
-    private final ItemImgRepository itemImgRepository;
 
     @Autowired
     public ItemService(ItemRepository itemRepository, ItemImgService itemImgService, ItemImgRepository itemImgRepository) {
         this.itemRepository = itemRepository;
         this.itemImgService = itemImgService;
-        this.itemImgRepository = itemImgRepository;
     }
 
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{

@@ -94,7 +94,7 @@ class OrderTest {
             orderItem.setOrderPrice(1000);
             orderItem.setOrder(order);
             // 영속성 컨텍스트에 저장되지 않은 orderItem 엔티티를 order 엔티티에 담아줌
-            order.getOrderItems().add(orderItem);
+            order.getOrderItems().add(orderItem); //orderItem을 담는 List를 가져와 add
         }
         Member member = new Member();
         memberRepository.save(member);

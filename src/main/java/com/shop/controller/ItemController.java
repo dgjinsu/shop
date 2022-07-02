@@ -34,10 +34,11 @@ public class ItemController {
         return "/item/itemForm";
     }
 
-    @PostMapping("/admin/item/new")
+    @PostMapping("/admin/item/new") //@Valid 와 BindingResult 를 써줌으로써 itemFormDto의 속성값이 비어있는지에 대해 검사해줌
     public String itemNew(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
                           Model model, @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList){
 
+        //상품 등록 시 필수 값이 없다면 다시 상품 등록 페이지로 전환
         if(bindingResult.hasErrors()){
             return "item/itemForm";
         }

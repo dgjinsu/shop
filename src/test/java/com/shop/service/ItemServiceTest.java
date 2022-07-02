@@ -62,11 +62,11 @@ class ItemServiceTest {
         itemFormDto.setStockNumber(100);
 
         List<MultipartFile> multipartFileList = createMultipartFiles();
-        Long itemId = itemService.saveItem(itemFormDto, multipartFileList);
-        Item item = itemRepository.findById(itemId)
+        Long itemId = itemService.saveItem(itemFormDto, multipartFileList); //itemRepository 에 저장
+        Item item = itemRepository.findById(itemId) //itemRepository 에서 조회
                 .orElseThrow(EntityNotFoundException::new);
 
-        List<ItemImg> itemImgList = itemImgRepository.findByItemOrderByIdAsc(item);
+        List<ItemImg> itemImgList = itemImgRepository.findByItemOrderByIdAsc(item); //id를 가지고 itemImgReposiroty 에서 조회
 
 
 

@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
+
 /**
  * "결제는 다른 사람과 독립적으로 이루어지며, 과정 중에 다른 연산이 끼어들 수 없다.
  *
@@ -52,5 +55,23 @@ public class ItemImgService {
         //상품 이미지 정보 저장
         itemImg.updateItemImg(oriImgName, imgName, imgUrl);
         itemImgRepository.save(itemImg);
+    }
+    
+    public void updateItemImg(Long itemImgId, MultipartFile itemImgFile) throws Exception{
+        if (!itemImgFile.isEmpty()){
+            ItemImg savedItemImg = itemImgRepository.findById(itemImgId)
+                    .orElseThrow(EntityNotFoundException::new);
+            if(!StringUtils.isEmpty(savedItemImg.getImgName())){ //기존에 등록한 상품 이미지 파일이 있을 경우 해당 파일을 삭제
+                fileService.deleteFile(itemImgLocation+"/"+savedItemImg.getImgName());
+            }
+            
+            String oriImgName = itemImgFile.getOriginalFilename();
+            String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
+            String imgUrl = "/images/item/" + imgName;
+
+            //savedItemImg 가 영속 상태이므로 데이터를 변경하는 것만으로 변경 감지 기능이 동작하여 트랜잭션이 끝날 때 update 쿼리가 실행된다.
+            savedItemImg.updateItemImg(oriImgName, imgName, imgUrl); 
+        }
+        
     }
 }

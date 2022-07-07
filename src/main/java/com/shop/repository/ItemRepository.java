@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredicateExecutor<Item>,
-ItemRepositoryCustom{
+        ItemRepositoryCustom{
     /**
      * 쿼리 메소드 findBy~~~
      */

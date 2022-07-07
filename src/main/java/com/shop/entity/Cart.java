@@ -17,8 +17,9 @@ public class Cart extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    // forein key FK
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name="member_id")
     private Member member;
+
+
 }

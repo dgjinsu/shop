@@ -49,6 +49,7 @@
                 <td>상태</td>
                 <td>등록자</td>
                 <td>등록일</td>
+                <td>item.number</td>
             </tr>
             </thead>
             <tbody>
@@ -60,6 +61,7 @@
                 <td th:text="${item.itemSellStatus == T(com.shop.constant.ItemSellStatus).SELL} ? '판매중' : '품절'"></td>
                 <td th:text="${item.createdBy}"></td>
                 <td th:text="${item.regTime}"></td>
+                <td th:text="${items.last}"></td>
             </tr>
             </tbody>
         </table>
@@ -67,16 +69,19 @@
         <div th:with="start=${(items.number/maxPage)*maxPage + 1}, end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})" >
             <ul class="pagination justify-content-center">
 
+<!--                첫번째 페이지면 이전 페이지로 이동하는 Previous 버튼 비활성화-->
                 <li class="page-item" th:classappend="${items.first}?'disabled'">
                     <a th:onclick="'javascript:page(' + ${items.number - 1} + ')'" aria-label='Previous' class="page-link">
                         <span aria-hidden='true'>Previous</span>
                     </a>
                 </li>
 
+<!--                현재 페이지면 active 클래스에 추가, 페이지 번호 클릭 시 해당 페이지로 이동-->
                 <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${items.number eq page-1}?'active':''">
                     <a th:onclick="'javascript:page(' + ${page - 1} + ')'" th:inline="text" class="page-link">[[${page}]]</a>
                 </li>
 
+<!--                마지막 페이지일 경우 Next 버튼 비활성화-->
                 <li class="page-item" th:classappend="${items.last}?'disabled'">
                     <a th:onclick="'javascript:page(' + ${items.number + 1} + ')'" aria-label='Next' class="page-link">
                         <span aria-hidden='true'>Next</span>

@@ -3,6 +3,7 @@ package com.shop.controller;
 
 import com.shop.dto.ItemFormDto;
 import com.shop.dto.ItemSearchDto;
+import com.shop.dto.MainItemDto;
 import com.shop.entity.Item;
 import com.shop.service.ItemService;
 import lombok.extern.java.Log;
@@ -109,8 +110,6 @@ public class ItemController {
         //Pageable 객체 생성, 조회할 페이지 번호, 한번에 가져올 데이터 수,
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 3);
         Page<Item> items = itemService.getAdminItemPage(itemSearchDto, pageable); //return new PageImpl<>(content, pageable, total);
-        log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        log.info(String.valueOf(items.getNumber()));
         model.addAttribute("items", items);
         model.addAttribute("itemSearchDto", itemSearchDto);
         model.addAttribute("maxPage", 5); //하단에 보여줄 페이지 번호의 최대 개수

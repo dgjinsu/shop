@@ -70,9 +70,9 @@ public class ItemController {
     }
 
     @GetMapping(value = "/admin/item/{itemId}")
-    public String itemDT1(@PathVariable("itemId") Long itemId, Model model){
+    public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
         try{
-            ItemFormDto itemFormDto = itemService.getItemDt1(itemId);
+            ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
             model.addAttribute("itemFormDto", itemFormDto);
         } catch(EntityNotFoundException e){
             model.addAttribute("errorMessage", "존재하지 않는 상품 입니다");
@@ -115,6 +115,13 @@ public class ItemController {
         model.addAttribute("maxPage", 5); //하단에 보여줄 페이지 번호의 최대 개수
 
         return "item/itemMng";
+    }
+
+    @GetMapping("/item/{itemId}")
+    public String itemDt1l(Model model, @PathVariable("itemId") Long itemId) {
+        ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+        model.addAttribute("item", itemFormDto);
+        return "item/itemDtl";
     }
 
 

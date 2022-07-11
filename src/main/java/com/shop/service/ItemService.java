@@ -58,7 +58,7 @@ public class ItemService {
     }
     //itemid : 30
     @Transactional(readOnly = true)
-    public ItemFormDto getItemDt1(Long itemId){
+    public ItemFormDto getItemDtl(Long itemId){
 
         Item item = itemRepository.findById(itemId) //itemRepository 에서 조회
                 .orElseThrow(EntityNotFoundException::new);

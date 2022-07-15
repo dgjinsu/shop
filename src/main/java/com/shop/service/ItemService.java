@@ -56,7 +56,6 @@ public class ItemService {
         }
         return item.getId();
     }
-    //itemid : 30
     @Transactional(readOnly = true)
     public ItemFormDto getItemDtl(Long itemId){
 
@@ -73,7 +72,7 @@ public class ItemService {
         }
 
         ItemFormDto itemFormDto = ItemFormDto.of(item);
-        itemFormDto.setItemImgDtoList(itemImgDtoList); //itemFormDto 를 생성하여 itemImgDtoList 설정
+        itemFormDto.setItemImgDtoList(itemImgDtoList); //itemFormDto 를 생성하여 itemImgDtoList 세팅
         return itemFormDto;
     }
 

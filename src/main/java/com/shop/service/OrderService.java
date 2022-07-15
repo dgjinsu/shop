@@ -32,9 +32,12 @@ public class OrderService {
         Member member = memberRepository.findByEmail(email);
 
         List<OrderItem> orderItemList = new ArrayList<>();
+
+        //OrderItem 객체 생성
         OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
         orderItemList.add(orderItem);
 
+        //Order 객체 생성
         Order order = Order.createOrder(member, orderItemList);
         orderRepository.save(order);
 

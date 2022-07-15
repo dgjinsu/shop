@@ -66,6 +66,8 @@ public class ItemImgService {
             }
             
             String oriImgName = itemImgFile.getOriginalFilename();
+
+            //지정된 Path 에 파일을 저장하고 파일 이름을 받음
             String imgName = fileService.uploadFile(itemImgLocation, oriImgName, itemImgFile.getBytes());
             String imgUrl = "/images/item/" + imgName;
 

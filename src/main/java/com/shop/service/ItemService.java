@@ -91,11 +91,13 @@ public class ItemService {
         return item.getId();
     }
 
+    //아이템 관리 페이징 처리
     @Transactional(readOnly = true)
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         return itemRepository.getAdminItemPage(itemSearchDto,pageable);
     }
 
+    //메인 페이징 처리ㅊㅇ ㅇㄷ나새ㅔ
     @Transactional(readOnly = true)
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         return itemRepository.getMainItemPage(itemSearchDto, pageable);

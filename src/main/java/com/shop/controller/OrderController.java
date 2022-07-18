@@ -37,6 +37,15 @@ public class OrderController {
 
             return new ResponseEntity<String>(sb.toString(), HttpStatus.BAD_REQUEST);
         }
-        return null;
+
+        String email = principal.getName();
+        Long orderId;
+
+        try {
+            orderId = orderService.order(orderDto, email); // OrderRepository 에 저장
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK); //결과값으로 생성된 주문 번호와 요청이 성공했다는 응답 상태 코드 반환
     }
 }

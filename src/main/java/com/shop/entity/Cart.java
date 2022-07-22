@@ -21,5 +21,11 @@ public class Cart extends BaseEntity{
     @JoinColumn(name="member_id")
     private Member member;
 
+    //회원 한 명당 1개의 장바구니를 갖는다. 처음 장바구니에 상품을 담을 때 생성
+    public static Cart createCart(Member member) {
+        Cart cart = new Cart();
+        cart.setMember(member);
+        return cart;
+    }
 
 }

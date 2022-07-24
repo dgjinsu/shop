@@ -13,6 +13,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     CartItem findByCartIdAndItemId(Long cartId, Long itemId);
 
     /*
+    CartDetailDto 리스트를 쿼리 하나로 조회하는 JPQL 문
     DTO 의 생성자를 이용하여 DTO 를 반환할 때는 new + 해당 DTO 패키지, 클래스명을 적음
     장바구니에 담겨있는 item.id 와 itemImg.item.id 와 같고
     대표 이미지인 것

@@ -32,6 +32,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    //searchSellStatus 가 null 이라면 null 을 return 그렇지 않다면 QItem.item.itemSellStatus.eq(searchSellStatus) 를 리턴
     private BooleanExpression searchSellStatusEq(ItemSellStatus searchSellStatus) {
         return searchSellStatus == null ? null : QItem.item.itemSellStatus.eq(searchSellStatus);
     }
@@ -72,6 +73,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         List<Item> content = queryFactory
                 .selectFrom(QItem.item)
                 .where(regDtsAfter(itemSearchDto.getSearchDateType()),
+                        //searchSellStatus == null ? null : QItem.item.itemSellStatus.eq(searchSellStatus)
                         searchSellStatusEq(itemSearchDto.getSearchSellStatus()),
                         searchByLike(itemSearchDto.getSearchBy(),
                                 itemSearchDto.getSearchQuery()))

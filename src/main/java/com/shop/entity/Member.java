@@ -42,7 +42,7 @@ public class Member extends BaseEntity{
         //BCryptPasswordEncoder Bean을 파라미터로 넘겨서 비밀번호를 암호화 한다.
         String password = passwordEncoder.encode(memberFormDto.getPassword());
         member.setPassword(password);
-        member.setRole(Role.ADMIN);
+        member.setRole(Role.USER);
         return member;
     }
 

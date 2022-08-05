@@ -129,6 +129,11 @@ ex)
 <div th:replace="fragments/footer::footer"></div>
 
 
+<MocMvc 테스트>
+MocMvc 클래스를 이용해 실제 객체와 비슷하지만 테스트에 필요한 기능만 가지는 가짜 객체이다. 이를 이용하면 웹 브라우저에서 실제로 요청하는것처럼 테스트할 수 있다.
+
+
+
 스프링 시큐리티
 인증 : 해당 리소스에 대해서 작업을 수행할 수 있는 주체인지 확인하는 것
 	EX) 게시글을 보는것은 로그인 필요 x / 댓글 작성하는것은 로그인 필요 O
@@ -138,14 +143,7 @@ ex)
 
 SecurityConfig 파일에 @EnableWebSecurity 어노테이션 선언과 WebSecurityConfigurerAdapter 을 상속받아 메소드 오버라이딩을 한다
 
-@Override
-protected void configure(HttpSecurity http) throws Exception {	Http 요청에 대한 보안을 설정
 
-}
-@Bean
-public PasswordEncoder passwordEncoder() {				비밀번호를 DB에 그대로 저장하면 해킹의 위험이 있다. BCryptPasswordEncoder의 해시함수를 이용하여 비밀번호를 암호화
-	return new BCryptPasswordEncoder();
-}
 
 
 javax.validation
@@ -164,3 +162,78 @@ public String newMember(@Valid MemberFormDto memberFormDto, BindingREsult bindin
 검사 후 결과는 bindingResult에 담아준다. 
 if(bindingResult.hasErrors()) 를 통해 에러가 있는지 확인
 
+
+<로그인, 로그아웃>
+- UserDetailsService 인터페이스 : DB에서 회원 정보를 가져오는 역할을 담당
+- loadUserByUsername() 메소드 : 회원 정보를 조회하여 사용자의 정보와 권한을 갖는 UserDetails 인터페이스를 반환, User 클래스는 UserDetails 인터페이스 구현체
+
+@Override
+protected void configure(HttpSecurity http) throws Exception {	Http 요청에 대한 보안을 설정
+	http.formLogin().~~~~		: 로그인관련
+
+	http.authorizeRequests().~~~	: 페이지 권한 관련(permitAll(), hasRole("ADMIN"), authenticated())
+
+	http.exceptionHandling().~~~	: 인증되지 않은 상요자가 리소스에 접근했을 때 수행되는 핸들러 등록
+}
+@Override
+protected void configure(AuthentiationManagerBuilder auth) throws Exception {		:userDetailService를 구현하고 있는 객체로 memberService를 지정해줌
+	auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
+}
+@Bean
+public PasswordEncoder passwordEncoder() {				비밀번호를 DB에 그대로 저장하면 해킹의 위험이 있다. BCryptPasswordEncoder의 해시함수를 이용하여 비밀번호를 암호화
+	return new BCryptPasswordEncoder();
+}
+
+로그인이 되었을때와 안 되어있을때의 navbar 화면은 달라야한다. 이를 위해서 sec:authorize 속성을 이용
+- 로그인을 했을 경우 : sec:authorize="isAuthenticated()"
+- 로그인을 하지 않았을 경우 : sec:authorize="isAnonymous()"
+- 특정 role 만 보이게 할 경우 : sec:authorize="hasAnyAuthority"('ROLE_ADMIN')
+
+
+<연관관계 매핑>
+JPA의 객체지향적 방식
+@OneToOne
+@OneToMany
+@ManyToOne
+@ManyToMany
+-단방향 / 양방향
+
+일대일 매핑일 경우 : @OneToOne 어노테이션을 이용해 회원 엔티티와 일대일로 매핑, @JoinColumn 어노테이션을 이용해 매핑할 외래키 지정
+장점 : 하나의 엔티티를 조회하면서 매핑된 다른 엔티티의 정보도 동시에 가져올 수 있다.
+
+양방향 매핑에서는 "연관 관계의 주인"을 설정해야 한다.
+- 연관 관계의 주인은 외래키가 있는 곳으로 설정
+- 연관 관계의 주인이 외래키를 관리(등록, 수정, 삭제)
+- 주인이 아닌 쪽은 연관 관계 매핑 시 mappedBy 속성의 값으로 연관 관계의 주인을 설정
+- 주인이 아닌 쪽은 읽기만 가능
+
+다대다 매핑
+- 실무에서 사용하지 않음
+- 정규화된 테이블 2개로 다대다를 표현할 수 없다. 따라서 연결 테이블을 생성해서 다대다 관계를 일대다, 다대일 관계로 풀어낸다.
+
+
+<영속성 전이> = cascade
+영속성 전이란?
+- 엔티티의 상태를 변경할 떄 해당 엔티티와 연관된 엔티티의 상태 변화를 전파시키는 옵션
+- 이떄 부모는 One에 해당하고 자식은 Many에 해당한다.
+
+CASCADE 종류
+- persist : 부모 엔티티가 영속화될 떄 자식 엔티티도 영속화
+- merge : 부모 엔티티가 병합될 때 자식 엔티티도 병합
+- remove : 부모 엔티티가 삭제될 떄 연관된 자식 엔티티도 삭제
+- refresh : 부모 엔티티가 refresh 되면 연관된 자식 엔티티도 refresh
+- detach : 부모 엔티티가 detach 되면 연관된 자식 엔티티도 detach 상태로 변경
+- ALL : 부모 엔티티의 영속성 상태 변화를 자식 엔티티에 모두 전이
+
+
+<고아객체 제거>
+고아 객체 : 부모 엔티티와 연관 관계가 끊어진 자식 엔티티
+- @OneToMany 어노테이션에 orphanRemoval = true 옵션을 추가
+
+<지연 로딩>
+즉시 로딩은 orderItem 데이터를 조회했을 때 orderItem 이외에 item, order, member 테이블을 조인해서 한꺼번에 가져온다.
+사용하지 않는 데이터도 한꺼번에 조회하므로 성능 문제 -> 실무에서 사용 X -> 지연로딩 방식 채택 (FetchType.LAZY)
+@ManyToOne(fetch = fetchType.LAZY) 옵션 추가
+
+이렇게 했을 때 OrderItem에서 Order 을 조회 하면 Order 실제 엔티티 대신에 "프록시 객체"를 넣어준다
+프록시 객체는 실제로 사용되기 전까지 데이터 로딩을 하지 않고, 실제 사용 시점에 쿼리문이 실행된다.

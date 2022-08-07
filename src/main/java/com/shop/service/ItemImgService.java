@@ -39,7 +39,7 @@ public class ItemImgService {
 
 
     public void saveItemImg(ItemImg itemImg, MultipartFile itemImgFile) throws Exception {
-        String oriImgName = itemImgFile.getOriginalFilename();
+        String oriImgName = itemImgFile.getOriginalFilename(); // .jpg 등 확장자 명을 따내기 위함
         String imgName = "";
         String imgUrl = "";
 

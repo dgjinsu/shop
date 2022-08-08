@@ -69,6 +69,7 @@ public class ItemController {
         return "redirect:/";
     }
 
+    //아이템 수정
     @GetMapping(value = "/admin/item/{itemId}")
     public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
         try{
@@ -82,6 +83,7 @@ public class ItemController {
         return "item/itemForm";
     }
 
+    //아이템 수정 완료
     @PostMapping("/admin/item/{itemId}")
     public String itemUpdate(@Valid ItemFormDto itemFormDto, BindingResult bindingResult,
                              @RequestParam("itemImgFile") List<MultipartFile> itemImgFileList, Model model){

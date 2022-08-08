@@ -56,6 +56,8 @@ public class ItemService {
         }
         return item.getId();
     }
+    
+    //트랜잭션을 읽기 전용으로 설정할 경우 JPA가 더티체킹(변경감지)을 수행하지 않아서 성능 향상 가능
     @Transactional(readOnly = true)
     public ItemFormDto getItemDtl(Long itemId){
 
@@ -83,6 +85,7 @@ public class ItemService {
 
         List<Long> itemImgIds = itemFormDto.getItemImgIds();
 
+        //기존에 저장되어 있던 이미지들, 새로 수정하거나 추가한 이미지들을 하나씩 파라미터로 넘겨서 update
         for(int i = 0; i<itemImgFileList.size(); i++) {
             itemImgService.updateItemImg(itemImgIds.get(i), itemImgFileList.get(i));
 
@@ -97,7 +100,7 @@ public class ItemService {
         return itemRepository.getAdminItemPage(itemSearchDto,pageable);
     }
 
-    //메인 페이징 처리ㅊㅇ ㅇㄷ나새ㅔ
+    //메인 페이징 처리
     @Transactional(readOnly = true)
     public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
         return itemRepository.getMainItemPage(itemSearchDto, pageable);

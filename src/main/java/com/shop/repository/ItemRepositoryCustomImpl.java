@@ -26,7 +26,7 @@ import java.util.List;
 
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
 
-    private JPAQueryFactory queryFactory;
+    private JPAQueryFactory queryFactory; // 동적으로 쿼리를 생성하기 위해 JPAQueryFactory 사용
 
     public ItemRepositoryCustomImpl(EntityManager em){
         this.queryFactory = new JPAQueryFactory(em);
@@ -70,7 +70,24 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
     @Override
     public Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
 
-        List<Item> content = queryFactory
+//        List<Item> content = queryFactory
+//                .selectFrom(QItem.item)
+//                .where(regDtsAfter(itemSearchDto.getSearchDateType()),
+//                        //searchSellStatus == null ? null : QItem.item.itemSellStatus.eq(searchSellStatus)
+//                        searchSellStatusEq(itemSearchDto.getSearchSellStatus()),
+//                        searchByLike(itemSearchDto.getSearchBy(),
+//                                itemSearchDto.getSearchQuery()))
+//                .orderBy(QItem.item.id.desc()) //내림차순으로 정렬
+//                .offset(pageable.getOffset()) //데이터를 가져올 시작 인덱스
+//                .limit(pageable.getPageSize()) //한번에 가지고 올 개수
+//                .fetch();
+//        long total = queryFactory.select(Wildcard.count).from(QItem.item)
+//                .where(regDtsAfter(itemSearchDto.getSearchDateType()),
+//                        searchSellStatusEq(itemSearchDto.getSearchSellStatus()),
+//                        searchByLike(itemSearchDto.getSearchBy(), itemSearchDto.getSearchQuery()))
+//                .fetchOne()
+//                ;
+            QueryResults<Item> results = queryFactory
                 .selectFrom(QItem.item)
                 .where(regDtsAfter(itemSearchDto.getSearchDateType()),
                         //searchSellStatus == null ? null : QItem.item.itemSellStatus.eq(searchSellStatus)
@@ -80,14 +97,10 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .orderBy(QItem.item.id.desc()) //내림차순으로 정렬
                 .offset(pageable.getOffset()) //데이터를 가져올 시작 인덱스
                 .limit(pageable.getPageSize()) //한번에 가지고 올 개수
-                .fetch();
+                .fetchResults();
+            List<Item> content = results.getResults();
+            long total = results.getTotal();
 
-        long total = queryFactory.select(Wildcard.count).from(QItem.item)
-                .where(regDtsAfter(itemSearchDto.getSearchDateType()),
-                        searchSellStatusEq(itemSearchDto.getSearchSellStatus()),
-                        searchByLike(itemSearchDto.getSearchBy(), itemSearchDto.getSearchQuery()))
-                .fetchOne()
-                ;
 
         return new PageImpl<>(content, pageable, total);
 

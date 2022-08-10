@@ -273,3 +273,9 @@ QueryResults<Item> results = queryFactory.selectFrom(QItem.item)
 List<Item> content = results.getResults(); //조회대상 리스트
 long total = results.getTotal(); //전체 개수
 return new PageImpl<>(content, pageable, total)
+
+
+@QueryProjection
+Querydsl 을 이용하여 상품 조회 시 결과 값을 받을 때 Item 객체로 받지만, @QueryProjection을 사용하면 DTO 객체로 받을 수 있다.
+
+* DTO로 받아오는것과 엔티티로 받아오는거의 차이는 뭘까???

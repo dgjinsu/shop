@@ -27,6 +27,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    //스프링에서 비동기 처리를 할 때 @RequestBody, @ResponseBody 어노테이션을 사용한다.
     @PostMapping("/order")
     public @ResponseBody ResponseEntity order(@RequestBody @Valid OrderDto orderDto, BindingResult bindingResult,
                                               Principal principal) {

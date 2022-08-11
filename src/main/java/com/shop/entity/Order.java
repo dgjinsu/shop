@@ -58,7 +58,7 @@ public class Order extends BaseEntity{
         return totalPrice;
     }
 
-    //주문 취소
+    //주문 취소, 수량 복구
     public void cancelOrder() {
         this.orderStatus = OrderStatus.CANCEL;
         for(OrderItem orderItem : orderItems) {

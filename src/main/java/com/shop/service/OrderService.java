@@ -72,9 +72,9 @@ public class OrderService {
     //현재 로그인한 사용자와 주문 데이터를 생성한 사용자가 같은지 검사
     @Transactional(readOnly = true)
     public boolean validateOrder(Long orderId, String email) {
-        Member curMember = memberRepository.findByEmail(email);
+        Member curMember = memberRepository.findByEmail(email); //로그인 한 사용자
         Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
-        Member savedMember = order.getMember();
+        Member savedMember = order.getMember(); //주문 한 사용자
 
         if(!StringUtils.equals(curMember.getEmail(), savedMember.getEmail())) {
             return false;
@@ -82,6 +82,7 @@ public class OrderService {
         return true;
     }
 
+    //주문 취소
     public void cancelOrder(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
         order.cancelOrder();

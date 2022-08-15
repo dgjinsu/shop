@@ -59,6 +59,7 @@ public class CartController {
         if(count <= 0) {
             return new ResponseEntity<String>("최소 1개 이상 담아주세요", HttpStatus.BAD_REQUEST);
         }
+        //장바구니에서 상품을 업데이트할 떄 현재 로그인한 회원과 해당 장바구니 상품을 저장한 회원이 같은지 검사
         else if(!cartService.validateCartItem(cartItemId, principal.getName())) {
             return new ResponseEntity<String>("수정 권한이 없습니다", HttpStatus.FORBIDDEN);
         }
@@ -69,6 +70,8 @@ public class CartController {
 
     @DeleteMapping("/cartItem/{cartItemId}")
     public @ResponseBody ResponseEntity deleteCartItem(@PathVariable("cartItemId") Long cartItemId, Principal principal) {
+
+        //장바구니에서 상품을 삭제할 떄 현재 로그인한 회원과 해당 장바구니 상품을 저장한 회원이 같은지 검사
         if(!cartService.validateCartItem(cartItemId, principal.getName())) {
             return new ResponseEntity<String>("수정 권한이 없습니다", HttpStatus.FORBIDDEN);
         }

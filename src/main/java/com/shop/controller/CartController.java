@@ -87,6 +87,8 @@ public class CartController {
         if(cartOrderDtoList == null || cartOrderDtoList.size() == 0) {
             return new ResponseEntity<String>("주문할 상품을 선택해주세요", HttpStatus.FORBIDDEN);
         }
+
+        //장바구니에서 상품을 업데이트할 떄 현재 로그인한 회원과 해당 장바구니 상품을 저장한 회원이 같은지 검사
         for(CartOrderDto cartOrder : cartOrderDtoList) {
             if(!cartService.validateCartItem(cartOrder.getCartItemId(), principal.getName())) {
                 return new ResponseEntity<String>("주문 권한이 없습니다", HttpStatus.FORBIDDEN);

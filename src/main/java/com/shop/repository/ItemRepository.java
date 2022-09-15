@@ -2,6 +2,7 @@ package com.shop.repository;
 
 import com.shop.entity.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
@@ -34,5 +35,9 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
 
     @Query(value = "select i from Item i where i.itemDetail like %:itemDetail% order by i.price desc", nativeQuery = true)
     List<Item> findByItemDetailByNative(@Param("itemDetail") String itemDetail);
+
+    @Modifying
+    @Query("update Item i set i.countVisit = i.countVisit + 1 where i.id = :id")
+    int updateView(Long id);
 
 }

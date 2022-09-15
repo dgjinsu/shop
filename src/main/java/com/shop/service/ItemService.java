@@ -1,13 +1,16 @@
 package com.shop.service;
 
+import com.shop.constant.Role;
 import com.shop.dto.ItemFormDto;
 import com.shop.dto.ItemImgDto;
 import com.shop.dto.ItemSearchDto;
 import com.shop.dto.MainItemDto;
 import com.shop.entity.Item;
 import com.shop.entity.ItemImg;
+import com.shop.entity.Member;
 import com.shop.repository.ItemImgRepository;
 import com.shop.repository.ItemRepository;
+import com.shop.repository.MemberRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Log
 @Service
@@ -29,12 +31,14 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final ItemImgService itemImgService;
     private final ItemImgRepository itemImgRepository;
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository, ItemImgService itemImgService, ItemImgRepository itemImgRepository, ItemImgRepository itemImgRepository1) {
+    public ItemService(ItemRepository itemRepository, ItemImgService itemImgService, ItemImgRepository itemImgRepository, ItemImgRepository itemImgRepository1, MemberRepository memberRepository) {
         this.itemRepository = itemRepository;
         this.itemImgService = itemImgService;
         this.itemImgRepository = itemImgRepository1;
+        this.memberRepository = memberRepository;
     }
 
     public Long saveItem(ItemFormDto itemFormDto, List<MultipartFile> itemImgFileList) throws Exception{
@@ -59,7 +63,9 @@ public class ItemService {
     
     //트랜잭션을 읽기 전용으로 설정할 경우 JPA가 더티체킹(변경감지)을 수행하지 않아서 성능 향상 가능
     @Transactional(readOnly = true)
-    public ItemFormDto getItemDtl(Long itemId){
+    public ItemFormDto getItemDtlByAdminUser(Long itemId){
+
+        itemRepository.updateView(itemId); // 조회수 증가가
 
         Item item = itemRepository.findById(itemId) //itemRepository 에서 조회
                 .orElseThrow(EntityNotFoundException::new);
@@ -75,6 +81,33 @@ public class ItemService {
 
         ItemFormDto itemFormDto = ItemFormDto.of(item);
         itemFormDto.setItemImgDtoList(itemImgDtoList); //itemFormDto 를 생성하여 itemImgDtoList 세팅
+
+        return itemFormDto;
+    }
+
+    @Transactional
+    public ItemFormDto getItemDtl(Long itemId, String email){
+
+        Member visitMember = memberRepository.findByEmail(email);
+        if (visitMember.getRole() == Role.USER) {
+            itemRepository.updateView(itemId); // USER 회원으로 접속했을때만 조회수 증가
+        }
+
+        Item item = itemRepository.findById(itemId) //itemRepository 에서 조회
+                .orElseThrow(EntityNotFoundException::new);
+
+        List<ItemImg> itemImgList = itemImgRepository.findByItemOrderByIdAsc(item);
+        List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+
+        //itemImgList -> itemImgDtoList
+        for(ItemImg itemImg : itemImgList) {
+            ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
+            itemImgDtoList.add(itemImgDto);
+        }
+
+        ItemFormDto itemFormDto = ItemFormDto.of(item);
+        itemFormDto.setItemImgDtoList(itemImgDtoList); //itemFormDto 를 생성하여 itemImgDtoList 세팅
+
         return itemFormDto;
     }
 

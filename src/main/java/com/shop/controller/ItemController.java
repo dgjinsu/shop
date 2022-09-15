@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,7 +74,7 @@ public class ItemController {
     @GetMapping(value = "/admin/item/{itemId}")
     public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
         try{
-            ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+            ItemFormDto itemFormDto = itemService.getItemDtlByAdminUser(itemId);
             model.addAttribute("itemFormDto", itemFormDto);
         } catch(EntityNotFoundException e){
             model.addAttribute("errorMessage", "존재하지 않는 상품 입니다");
@@ -120,8 +121,8 @@ public class ItemController {
     }
 
     @GetMapping("/item/{itemId}")
-    public String itemDtl(Model model, @PathVariable("itemId") Long itemId) {
-        ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+    public String itemDtl(Model model, @PathVariable("itemId") Long itemId, Principal principal) {
+        ItemFormDto itemFormDto = itemService.getItemDtl(itemId, principal.getName());
         model.addAttribute("item", itemFormDto);
         return "item/itemDtl";
     }

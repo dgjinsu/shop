@@ -117,7 +117,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
 
         QueryResults<MainItemDto> results = queryFactory
                 .select(
-                        new QMainItemDto(item.id, item.itemNm, item.itemDetail, itemImg.imgUrl, item.price)
+                        new QMainItemDto(item.id, item.itemNm, item.itemDetail, itemImg.imgUrl, item.price, item.countVisit)
                 )
                 .from(itemImg)
                 .join(itemImg.item, item) //itemImg 와 item 을 내부 조인

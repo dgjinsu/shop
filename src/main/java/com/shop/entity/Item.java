@@ -36,6 +36,9 @@ public class Item extends BaseEntity{
 
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;  //상품 판매 상태
+
+    @Column(columnDefinition = "int default 0") //조회수는 null 이 아니라 0
+    private int countVisit;
     
     public void updateItem(ItemFormDto itemFormDto) { //엔티티에 비즈니스 로직을 추가하여 조금 더 객체지향적으로 코딩 가능
         this.itemNm = itemFormDto.getItemNm();
@@ -57,4 +60,5 @@ public class Item extends BaseEntity{
     public void addStock(int stockNumber) {
         this.stockNumber += stockNumber;
     }
+
 }

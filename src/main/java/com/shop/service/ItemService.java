@@ -65,8 +65,6 @@ public class ItemService {
     @Transactional(readOnly = true)
     public ItemFormDto getItemDtlByAdminUser(Long itemId){
 
-        itemRepository.updateView(itemId); // 조회수 증가가
-
         Item item = itemRepository.findById(itemId) //itemRepository 에서 조회
                 .orElseThrow(EntityNotFoundException::new);
 
@@ -86,12 +84,10 @@ public class ItemService {
     }
 
     @Transactional
-    public ItemFormDto getItemDtl(Long itemId, String email){
+    public ItemFormDto getItemDtl(Long itemId){
 
-        Member visitMember = memberRepository.findByEmail(email);
-        if (visitMember.getRole() == Role.USER) {
-            itemRepository.updateView(itemId); // USER 회원으로 접속했을때만 조회수 증가
-        }
+        itemRepository.updateView(itemId); // USER 회원, 비회원 으로 접속했을때만 조회수 증가
+
 
         Item item = itemRepository.findById(itemId) //itemRepository 에서 조회
                 .orElseThrow(EntityNotFoundException::new);

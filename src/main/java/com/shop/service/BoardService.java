@@ -6,6 +6,7 @@ import com.shop.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,7 +26,14 @@ public class BoardService {
         return board.getId();
     }
 
-    public List<Board> boardList() {
+    public List<BoardFormDto> boardList() {
+        List<Board> boardList = boardRepository.findAll();
+        List<BoardFormDto> boardFormDtoList = new ArrayList<>();
 
+        for(Board board : boardList) {
+            boardFormDtoList.add(BoardFormDto.of(board));
+        }
+
+        return boardFormDtoList;
     }
 }

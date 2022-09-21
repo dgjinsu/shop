@@ -75,7 +75,8 @@
             </div>
             <input type="text" th:field="*{itemNm}" class="form-control" placeholder="상품명을 입력해주세요">
         </div>
-        <p th:if="${#fields.hasErrors('itemNm')}" th:errors="*{itemNm}" class="fieldError">Incorrect data</p>
+        <p th:if="${#fields.h
+        asErrors('itemNm')}" th:errors="*{itemNm}" class="fieldError">Incorrect data</p>
 
         <div class="input-group">
             <div class="input-group-prepend">

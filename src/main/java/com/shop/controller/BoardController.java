@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -47,7 +48,8 @@ public class BoardController {
 
     @GetMapping("/board")
     public String boardList(Model model) {
-        List<Board> boardList = boardService.boardList();
+        List<BoardFormDto> boardList = boardService.boardList();
+        System.out.println(boardList.get(0));
         model.addAttribute("boardList", boardList);
         return "board/boardList";
     }

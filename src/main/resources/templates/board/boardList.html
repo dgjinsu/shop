@@ -40,8 +40,8 @@
         </thead>
         <tbody>
         <tr th:each="board : ${boardList}">
-            <td class="title" th:text="${board.title}">
-<!--                <a href="'/board/'+${board.id}">게시판 제목이 들어갑니다</a>-->
+            <td class="title">
+                <a th:href="'/board/'+${board.id}" th:text="${board.title}">게시판 제목이 들어갑니다</a>
             </td>
             <td class="name" th:text="${board.createdBy}">글쓴이이름</td>
             <td th:text="${#temporals.format(board.regTime,'yyyy-MM-dd')}" class="date">2008/02/14</td>
@@ -61,6 +61,11 @@
     </table>
 
     <!-- 리스트 게시판 끝-->
+    <th:block th:each="page : ${#numbers.sequence(startPage, endPage)}">
+        <a th:if="${page != nowPage}" th:href="@{/board(page = ${page - 1})}" th:text="${page}"></a>
+        <strong th:if="${page == nowPage}" th:text="${page}" style="color : red"></strong>
+    </th:block>
+
 
 </div>
 

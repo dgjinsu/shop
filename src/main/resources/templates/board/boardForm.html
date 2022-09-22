@@ -3,6 +3,8 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+
+
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
@@ -34,6 +36,8 @@
         <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError">Incorrect data</p>
 
 
+
+
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text">내용</span>
@@ -43,6 +47,7 @@
 
 
         <p th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}" class="fieldError">Incorrect data</p>
+
 
         <div th:if="${#strings.isEmpty(boardFormDto.id)}" style="text-align: center">
             <button th:formaction="@{/board/new}" type="submit" class="btn btn-primary">저장</button>

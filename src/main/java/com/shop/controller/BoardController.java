@@ -4,10 +4,15 @@ import com.shop.dto.BoardFormDto;
 import com.shop.entity.Board;
 import com.shop.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -25,13 +30,13 @@ public class BoardController {
     }
 
     @GetMapping("/board/new")
-    public String boardForm(Model model) {
+    public String boardNew(Model model) {
         model.addAttribute("boardFormDto", new BoardFormDto());
         return "board/boardForm";
     }
 
     @PostMapping("/board/new")
-    public String boardNew(@Valid BoardFormDto boardFormDto, Model model, BindingResult bindingResult) {
+    public String boardNew(@Valid BoardFormDto boardFormDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "board/boardForm";
         }
@@ -46,12 +51,30 @@ public class BoardController {
         return "redirect:/";
     }
 
+    //@PageableDefault 의 기본 size 는 10이다
     @GetMapping("/board")
-    public String boardList(Model model) {
-        List<BoardFormDto> boardList = boardService.boardList();
-        System.out.println(boardList.get(0));
-        model.addAttribute("boardList", boardList);
+    public String boardList(Model model, @PageableDefault(page = 0, sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
+//        List<BoardFormDto> boardList = boardService.boardList();
+//        model.addAttribute("boardList", boardList);
+
+        Page<Board> boardPage = boardService.boardPage(pageable);
+
+        int nowPage = boardPage.getPageable().getPageNumber() + 1;
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, boardPage.getTotalPages());
+
+        model.addAttribute("boardList", boardPage);
+        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         return "board/boardList";
+    }
+
+    @GetMapping("/board/{boardId}")
+    public String boardDetail(@PathVariable Long boardId, Model model) {
+        BoardFormDto boardFormDto = boardService.boardDtl(boardId);
+        model.addAttribute(boardFormDto);
+        return "board/boardDtl";
     }
 
 }

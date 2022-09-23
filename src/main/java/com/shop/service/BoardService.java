@@ -2,7 +2,9 @@ package com.shop.service;
 
 import com.shop.dto.BoardFormDto;
 import com.shop.entity.Board;
+import com.shop.entity.Member;
 import com.shop.repository.BoardRepository;
+import com.shop.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,16 +13,17 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final MemberRepository memberRepository;
 
     @Autowired
-    public BoardService(BoardRepository boardRepository) {
+    public BoardService(BoardRepository boardRepository, MemberRepository memberRepository) {
         this.boardRepository = boardRepository;
+        this.memberRepository = memberRepository;
     }
 
 
@@ -30,11 +33,14 @@ public class BoardService {
         return board.getId();
     }
 
-    public BoardFormDto boardDtl(Long boardId) {
+    public BoardFormDto boardDtl(Long boardId, String name) {
         Board savedBoard = boardRepository.findById(boardId)
                 .orElseThrow(EntityNotFoundException::new);
 
+        Member member = memberRepository.findByEmail(name);
+
         BoardFormDto boardFormDto = BoardFormDto.of(savedBoard);
+        boardFormDto.setWriter(member.getName());
         return boardFormDto;
     }
 

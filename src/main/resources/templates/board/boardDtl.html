@@ -1,10 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-zzzzzzz
-</body>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        .input-group {
+            margin-bottom : 30px
+        }
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+
+
+    <p class="h2">
+        <span th:text="${boardFormDto.writer}"></span>님의 질문입니다.
+    </p>
+    <hr>
+    <h4>
+        제목: <span th:text="${boardFormDto.title}"></span>
+    </h4>
+    <p>
+        내용: <span th:text="${boardFormDto.contents}"></span>
+    </p>
+
+    <form role="form" method="get">
+        <button th:formaction="@{/board/edit/{boardId}(boardId=${boardFormDto.id})}" type="submit" class="btn btn-primary">수정</button>
+    </form>
+
+
+</div>
+
 </html>

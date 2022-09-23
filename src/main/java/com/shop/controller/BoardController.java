@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -56,6 +57,7 @@ public class BoardController {
     public String boardList(Model model, @PageableDefault(page = 0, sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
 //        List<BoardFormDto> boardList = boardService.boardList();
 //        model.addAttribute("boardList", boardList);
+        System.out.println(pageable.getPageNumber());
 
         Page<Board> boardPage = boardService.boardPage(pageable);
 
@@ -71,10 +73,17 @@ public class BoardController {
     }
 
     @GetMapping("/board/{boardId}")
-    public String boardDetail(@PathVariable Long boardId, Model model) {
-        BoardFormDto boardFormDto = boardService.boardDtl(boardId);
+    public String boardDetail(@PathVariable Long boardId, Principal principal, Model model) {
+        BoardFormDto boardFormDto = boardService.boardDtl(boardId, principal.getName());
         model.addAttribute(boardFormDto);
         return "board/boardDtl";
+    }
+
+    @GetMapping("board/edit/{boardId}")
+    public String editBoard(@PathVariable Long boardId, Principal principal, Model model) {
+        BoardFormDto boardFormDto = boardService.boardDtl(boardId, principal.getName());
+        model.addAttribute("boardFormDto", boardFormDto);
+        return "board/boardForm";
     }
 
 }

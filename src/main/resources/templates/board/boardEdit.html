@@ -22,7 +22,7 @@
     <form role="form" method="post" th:object="${boardFormDto}">
 
         <p class="h2">
-            질문 등록
+            질문 수정
         </p>
         <hr>
         <input type="hidden" th:field="*{id}">
@@ -31,29 +31,14 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">제목</span>
             </div>
-            <input type="text" th:field="*{title}" class="form-control" placeholder="제목을 입력해주세요">
+            <input type="text" th:field="*{title}" class="form-control">
         </div>
         <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="fieldError">Incorrect data</p>
 
 
 
 
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">내용</span>
-            </div>
-            <textarea rows="20" cols="50" class="form-control" aria-label="With textarea" th:field="*{contents}"></textarea>
-        </div>
 
-
-        <p th:if="${#fields.hasErrors('contents')}" th:errors="*{contents}" class="fieldError">Incorrect data</p>
-
-
-        <div th:if="${#strings.isEmpty(boardFormDto.id)}" style="text-align: center">
-            <button th:formaction="@{/board/new}" type="submit" class="btn btn-primary">저장</button>
-        </div>
-
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
     </form>
 

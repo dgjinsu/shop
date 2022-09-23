@@ -41,12 +41,11 @@
         <tbody>
         <tr th:each="board : ${boardList}">
             <td class="title">
-                <a th:href="'/board/'+${board.id}" th:text="${board.title}">게시판 제목이 들어갑니다</a>
+                <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}">게시판 제목이 들어갑니다</a>
             </td>
             <td class="name" th:text="${board.createdBy}">글쓴이이름</td>
             <td th:text="${#temporals.format(board.regTime,'yyyy-MM-dd')}" class="date">2008/02/14</td>
         </tr>
-
 <!--        <tr class="reply">-->
 <!--            <td class="title" style="padding-left:30px;">-->
 <!--                <a href="#">블로그 개편 답글</a>-->

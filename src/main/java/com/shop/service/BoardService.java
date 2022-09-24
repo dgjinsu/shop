@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BoardService {
@@ -33,14 +35,11 @@ public class BoardService {
         return board.getId();
     }
 
-    public BoardFormDto boardDtl(Long boardId, String name) {
+    public BoardFormDto boardDtl(Long boardId) {
         Board savedBoard = boardRepository.findById(boardId)
                 .orElseThrow(EntityNotFoundException::new);
 
-        Member member = memberRepository.findByEmail(name);
-
         BoardFormDto boardFormDto = BoardFormDto.of(savedBoard);
-        boardFormDto.setWriter(member.getName());
         return boardFormDto;
     }
 
@@ -58,5 +57,19 @@ public class BoardService {
     public Page<Board> boardPage(Pageable pageable) {
         return boardRepository.findAll(pageable);
 
+    }
+
+    @Transactional
+    public Long updateBoard(BoardFormDto boardFormDto) {
+        Board board = boardRepository.findById(boardFormDto.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        board.updateBoard(boardFormDto);
+        boardRepository.save(board);
+        return board.getId();
+    }
+
+    @Transactional
+    public void deleteBoard(Long boardId) {
+        boardRepository.deleteById(boardId);
     }
 }

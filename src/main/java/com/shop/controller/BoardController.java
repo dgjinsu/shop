@@ -8,13 +8,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -74,16 +73,42 @@ public class BoardController {
 
     @GetMapping("/board/{boardId}")
     public String boardDetail(@PathVariable Long boardId, Principal principal, Model model) {
-        BoardFormDto boardFormDto = boardService.boardDtl(boardId, principal.getName());
-        model.addAttribute(boardFormDto);
+        BoardFormDto boardFormDto = boardService.boardDtl(boardId);
+        model.addAttribute("boardFormDto", boardFormDto);
+        model.addAttribute("loginUser", principal.getName());
         return "board/boardDtl";
     }
 
     @GetMapping("board/edit/{boardId}")
     public String editBoard(@PathVariable Long boardId, Principal principal, Model model) {
-        BoardFormDto boardFormDto = boardService.boardDtl(boardId, principal.getName());
+        BoardFormDto boardFormDto = boardService.boardDtl(boardId);
         model.addAttribute("boardFormDto", boardFormDto);
         return "board/boardForm";
+    }
+
+    @PostMapping("board/edit/{boardId}")
+    public String editBoard(@Valid BoardFormDto boardFormDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "board/boardForm";
+        }
+
+        try {
+            boardService.updateBoard(boardFormDto);
+        } catch (Exception e){
+            model.addAttribute("errorMessage", "상품 수정 중 에러가 발생하였습니다.");
+            return "item/itemForm";
+        }
+
+        return "redirect:/board/{boardId}";
+
+    }
+
+    @PostMapping("board/delete/{boardId}")
+    public String deleteBoard(@PathVariable Long boardId) {
+        System.out.println(boardId);
+        boardService.deleteBoard(boardId);
+
+        return "redirect:/board";
     }
 
 }

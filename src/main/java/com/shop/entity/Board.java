@@ -1,5 +1,6 @@
 package com.shop.entity;
 
+import com.shop.dto.BoardFormDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +20,11 @@ public class Board extends BaseEntity{
 
     @Column(nullable = false)
     private String contents;
+
+    public void updateBoard(BoardFormDto boardFormDto) {
+        this.title = boardFormDto.getTitle();
+        this.contents = boardFormDto.getContents();
+    }
 
 
 }

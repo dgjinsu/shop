@@ -19,7 +19,7 @@ public class BoardFormDto {
     @NotBlank(message = "내용을 입력해주세요")
     private String contents;
 
-    private String writer;
+    private String createdBy;
 
     private LocalDateTime regTime;      // 등록시간
 

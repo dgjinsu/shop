@@ -21,7 +21,7 @@
 
 
     <p class="h2">
-        <span th:text="${boardFormDto.writer}"></span>님의 질문입니다.
+        <span th:text="${boardFormDto.createdBy}"></span>님의 질문입니다.
     </p>
     <hr>
     <h4>
@@ -31,9 +31,18 @@
         내용: <span th:text="${boardFormDto.contents}"></span>
     </p>
 
-    <form role="form" method="get">
-        <button th:formaction="@{/board/edit/{boardId}(boardId=${boardFormDto.id})}" type="submit" class="btn btn-primary">수정</button>
-    </form>
+
+    <div th:if="${boardFormDto.createdBy} == ${loginUser}">
+        <form role="form">
+            <button th:formaction="@{/board/edit/{boardId}(boardId=${boardFormDto.id})}" formmethod="get" type="submit" class="btn btn-primary">수정</button>
+        </form>
+
+
+        <form role="form" th:action="@{'/board/delete/'+${boardFormDto.id}}" method="post">
+            <button type="submit" class="btn btn-primary">삭제</button>
+        </form>
+
+    </div>
 
 
 </div>

@@ -1,6 +1,7 @@
 package com.shop.controller;
 
 import com.shop.dto.BoardFormDto;
+import com.shop.dto.CommentFormDto;
 import com.shop.entity.Board;
 import com.shop.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,7 @@ public class BoardController {
     public String boardDetail(@PathVariable Long boardId, Principal principal, Model model) {
         BoardFormDto boardFormDto = boardService.boardDtl(boardId);
         model.addAttribute("boardFormDto", boardFormDto);
+        model.addAttribute("commentFormDto", new CommentFormDto());
         model.addAttribute("loginUser", principal.getName());
         return "board/boardDtl";
     }

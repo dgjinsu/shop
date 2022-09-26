@@ -1,10 +1,14 @@
 package com.shop.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@Getter @Setter
 @Table(name = "comment")
-public class Comment {
+public class Comment extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,4 +24,6 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+
 }

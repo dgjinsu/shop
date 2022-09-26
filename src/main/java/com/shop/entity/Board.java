@@ -22,8 +22,7 @@ public class Board extends BaseEntity{
     @Column(nullable = false)
     private String contents;
 
-    @OneToMany
-    @JoinColumn()
+    @OneToMany(mappedBy = "board")
     private List<Comment> commentList;
 
     public void updateBoard(BoardFormDto boardFormDto) {

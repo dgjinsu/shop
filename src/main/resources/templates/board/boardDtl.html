@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layouts/layout1}">
 
 
@@ -33,16 +34,26 @@
 
 
     <div th:if="${boardFormDto.createdBy} == ${loginUser}">
-        <form role="form">
+        <form role="form" method="post" th:action="@{'/board/delete/'+${boardFormDto.id}}">
+            <button type="submit" class="btn btn-primary">삭제</button>
             <button th:formaction="@{/board/edit/{boardId}(boardId=${boardFormDto.id})}" formmethod="get" type="submit" class="btn btn-primary">수정</button>
         </form>
-
-
-        <form role="form" th:action="@{'/board/delete/'+${boardFormDto.id}}" method="post">
-            <button type="submit" class="btn btn-primary">삭제</button>
-        </form>
-
     </div>
+
+
+    <div sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+        <form action="boardContent.html" th:action="@{'/comment/write/'+${boardFormDto.id}}" method="post" th:object="${commentFormDto}">
+            <div class="comment-form" style="text-align: center;">
+                <div class="comment-form2" style="width:300px;height: 200px;display: inline-block">
+                    <label for="content">댓글 달기</label>
+                    <textarea th:field="*{comment}" class="form-control" id="content" name="content" rows="3"></textarea>
+                    <button type="submit" class="btn btn-primary">작성</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
 
 
 </div>

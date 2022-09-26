@@ -36,7 +36,7 @@ public class Member extends BaseEntity{
     private Role role;
 
     @OneToMany(mappedBy = "member")
-    private List<Comment> commentList; 
+    private List<Comment> commentList;
 
     public  static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
         Member member = new Member();

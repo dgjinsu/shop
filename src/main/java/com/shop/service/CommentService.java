@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CommentService {
@@ -37,11 +39,29 @@ public class CommentService {
         commentFormDto.setBoard(board);
         commentFormDto.setMember(member);
 
-        Comment comment = CommentFormDto.createBoard(commentFormDto);
+        Comment comment = CommentFormDto.createComment(commentFormDto);
         Comment savedComment = commentRepository.save(comment);
 
         return savedComment.getId();
+    }
 
-        //저장하는거 까지 다 만듦. 이어서 저장한 커맨트 보이는 구현부 만들면 됨
+    public List<CommentFormDto> findByBoard(Long boardId) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        List<CommentFormDto> commentFormDtoList = new ArrayList<>();
+
+        //commentList -> commentFormDtoList
+        List<Comment> commentList = commentRepository.findByBoardOrderByIdAsc(board);
+        for(Comment comment : commentList) {
+            commentFormDtoList.add(CommentFormDto.of(comment));
+        }
+        return commentFormDtoList;
+    }
+
+    public void deleteComment(Long commentId) {
+        boardRepository.deleteById(commentId);
+        
+        //삭제 구현 하면 됨
     }
 }

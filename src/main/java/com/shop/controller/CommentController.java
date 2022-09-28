@@ -23,8 +23,9 @@ public class CommentController {
     }
 
     @PostMapping("/write/{boardId}")
-    public @ResponseBody String writeComment(@Valid CommentFormDto commentFormDto, BindingResult bindingResult,
+    public String writeComment(@Valid CommentFormDto commentFormDto, BindingResult bindingResult,
                                              @PathVariable Long boardId, Principal principal, Model model) {
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@");
         if (bindingResult.hasErrors()) {
             return "board/boardForm";
         }
@@ -35,10 +36,14 @@ public class CommentController {
             model.addAttribute("errorMessage", "상품 수정 중 에러가 발생하였습니다.");
             return "board/boardForm";
         }
-        System.out.println(commentFormDto.getComment());
 
 
-        return "board/boardDtl";
+        return "redirect:/board/{boardId}";
+    }
+
+    @PostMapping("/delete/{commentId}")
+    public String deleteComment(@PathVariable Long commentId) {
+
     }
 
 }

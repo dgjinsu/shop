@@ -25,9 +25,15 @@ public class CommentFormDto {
 
     private LocalDateTime regTime; //등록시간
 
+    private String createdBy; // 등록자
+
     private static ModelMapper modelMapper = new ModelMapper();
 
-    public static Comment createBoard(CommentFormDto commentFormDto) {
+    public static Comment createComment(CommentFormDto commentFormDto) {
         return modelMapper.map(commentFormDto, Comment.class);
+    }
+
+    public static CommentFormDto of(Comment comment) {
+        return modelMapper.map(comment, CommentFormDto.class);
     }
 }

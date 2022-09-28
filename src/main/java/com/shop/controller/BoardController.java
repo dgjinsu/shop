@@ -3,14 +3,14 @@ package com.shop.controller;
 import com.shop.dto.BoardFormDto;
 import com.shop.dto.CommentFormDto;
 import com.shop.entity.Board;
+import com.shop.entity.Comment;
 import com.shop.service.BoardService;
+import com.shop.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,10 +24,12 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
+    private final CommentService commentService;
 
     @Autowired
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService, CommentService commentService) {
         this.boardService = boardService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/board/new")
@@ -49,7 +51,7 @@ public class BoardController {
             return "item/itemForm";
         }
 
-        return "redirect:/";
+        return "redirect:/board";
     }
 
     //@PageableDefault 의 기본 size 는 10이다
@@ -75,9 +77,11 @@ public class BoardController {
     @GetMapping("/board/{boardId}")
     public String boardDetail(@PathVariable Long boardId, Principal principal, Model model) {
         BoardFormDto boardFormDto = boardService.boardDtl(boardId);
+        List<CommentFormDto> commentFormDtoList = commentService.findByBoard(boardId);
         model.addAttribute("boardFormDto", boardFormDto);
         model.addAttribute("commentFormDto", new CommentFormDto());
         model.addAttribute("loginUser", principal.getName());
+        model.addAttribute("commentFormDtoList", commentFormDtoList);
         return "board/boardDtl";
     }
 

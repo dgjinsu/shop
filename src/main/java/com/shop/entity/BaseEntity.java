@@ -11,11 +11,10 @@ import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 
 @EntityListeners(value = {AuditingEntityListener.class})   //Auditing을 적용하기 위해
-@MappedSuperclass  // 공통 매핑 정보가 필요할 떄 사용
+@MappedSuperclass  //JPA Entity 클래스들이 해당 추상 클래스를 상속할 경우 createdBy, modifiedBy 를 컬럼으로 인식
 @Getter
 public class BaseEntity extends BaseTimeEntity{
-    
-    
+
     @CreatedBy
     @Column(updatable = false)
     private String createdBy;   // 등록자

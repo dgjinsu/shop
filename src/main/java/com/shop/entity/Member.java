@@ -35,7 +35,7 @@ public class Member extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE) //고아객체 제거
     private List<Comment> commentList;
 
     public  static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {

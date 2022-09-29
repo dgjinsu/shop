@@ -22,7 +22,7 @@ public class Board extends BaseEntity{
     @Column(nullable = false)
     private String contents;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE) //고아객체 제거 (게시판이 사라졌을 때 그에 달린 댓글도 함께 지움)
     private List<Comment> commentList;
 
     public void updateBoard(BoardFormDto boardFormDto) {

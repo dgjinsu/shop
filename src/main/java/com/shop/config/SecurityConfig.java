@@ -20,6 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MemberService memberService;
 
+
     @Autowired
     public SecurityConfig(MemberService memberService) {
         this.memberService = memberService;
@@ -33,6 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+
+//        http.csrf().disable();
 
         //loginForm 에서 로그인을 누룰 시 여기서 동작
         http.formLogin()

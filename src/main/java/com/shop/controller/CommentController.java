@@ -41,9 +41,20 @@ public class CommentController {
         return "redirect:/board/{boardId}";
     }
 
-    @PostMapping("/delete/{commentId}")
-    public String deleteComment(@PathVariable Long commentId) {
-
+    //댓글 삭제
+    ///comment/delete/'+${comment.id}+'/'+${boardFormDto.id}
+    @GetMapping("/delete/{commentId}/{boardId}")
+    public String delete(@PathVariable Long commentId, @PathVariable Long boardId) {
+        commentService.deleteComment(commentId);
+        return "redirect:/board/" + boardId;
     }
 
+    /**
+     * 스프링 시큐리티를 사용할 경우 모든 POST 방식의 데이터 전송에는 CSRF 토큰 값이 있어야 함!!!!!
+     */
+    @PostMapping("/delete/{commentId}/{boardId}")
+    public String delete1(@PathVariable Long commentId, @PathVariable Long boardId) {
+        commentService.deleteComment(commentId);
+        return "redirect:/board/" + boardId;
+    }
 }

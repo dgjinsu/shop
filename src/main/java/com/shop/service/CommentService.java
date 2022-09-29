@@ -60,7 +60,7 @@ public class CommentService {
     }
 
     public void deleteComment(Long commentId) {
-        boardRepository.deleteById(commentId);
+        commentRepository.deleteById(commentId);
         
         //삭제 구현 하면 됨
     }

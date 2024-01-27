@@ -38,6 +38,6 @@ Spring-Boot, JPA를 사용한 쇼핑몰 클론코딩 프로젝트 입니다.
 <br><br>
 
 ## 🛠️ ERD
-![image](https://github.com/dgjinsu/shop/assets/97269799/16f70e66-c531-4cb5-af40-c13be78c7ada)
+![image](https://github.com/dgjinsu/shop/assets/97269799/65eff24e-3c54-4433-9cc2-1e3ce4f260b0)
 
 
